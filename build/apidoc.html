@@ -1,0 +1,251 @@
+<div class="apidocDiv">
+<style>
+/*csslint
+*/
+.apidocDiv {
+    background: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.apidocDiv a[href] {
+    color: #33f;
+    font-weight: bold;
+    text-decoration: none;
+}
+.apidocDiv a[href]:hover {
+    text-decoration: underline;
+}
+.apidocCodeCommentSpan {
+    background: #bbf;
+    color: #000;
+    display: block;
+}
+.apidocCodeKeywordSpan {
+    color: #d00;
+    font-weight: bold;
+}
+.apidocCodePre {
+    background: #eef;
+    border: 1px solid;
+    color: #777;
+    padding: 5px;
+    white-space: pre-wrap;
+}
+.apidocFooterDiv {
+    margin-top: 20px;
+    text-align: center;
+}
+.apidocModuleLi {
+    margin-top: 10px;
+}
+.apidocSectionDiv {
+    border-top: 1px solid;
+    margin-top: 20px;
+}
+.apidocSignatureSpan {
+    color: #777;
+    font-weight: bold;
+}
+</style>
+<h1>api documentation for
+    <a
+
+        href="https://github.com/olsonpm/fancybox"
+
+    >fancybox (v3.0.0)</a>
+</h1>
+<h4>fancyBox is a tool that offers a nice and elegant way to add zooming functionality for images, html content and multi-media on your webpages. It is built on the top of the popular JavaScript framework jQuery and is both easy to implement and a snap to customize.</h4>
+<div class="apidocSectionDiv"><a
+    href="#apidoc.tableOfContents"
+    id="apidoc.tableOfContents"
+><h1>table of contents</h1></a><ol>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.fancybox">module fancybox</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.fancybox.fancybox">
+            function <span class="apidocSignatureSpan"></span>fancybox
+            <span class="apidocSignatureSpan">(jQuery)</span>
+            </a>
+
+        </li>
+
+    </ol></li>
+
+</ol></div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.fancybox" id="apidoc.module.fancybox">module fancybox</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.fancybox.fancybox" id="apidoc.element.fancybox.fancybox">
+        function <span class="apidocSignatureSpan"></span>fancybox
+        <span class="apidocSignatureSpan">(jQuery)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">fancybox = function (jQuery) {
+    &#x22;use strict&#x22;;
+
+    var H = jQuery(&#x22;html&#x22;),
+        W = jQuery(window),
+        D = jQuery(document),
+        F = jQuery.fancybox = function() {
+            F.open.apply(this, arguments);
+        },
+        IE = navigator.userAgent.match(/msie/i),
+        didUpdate = null,
+        isTouch = document.createTouch !== undefined,
+
+        isQuery = function(obj) {
+            return obj &#x26;&#x26; obj.hasOwnProperty &#x26;&#x26; obj instanceof jQuery;
+        },
+        isString = function(str) {
+            return str &#x26;&#x26; jQuery.type(str) === &#x22;string&#x22;;
+        },
+        isPercentage = function(str) {
+            return isString(str) &#x26;&#x26; str.indexOf(&#x27;%&#x27;) &#x3e; 0;
+        },
+        isScrollable = function(el) {
+            return (el &#x26;&#x26; !(el.style.overflow &#x26;&#x26; el.style.overflow === &#x27;hidden&#x27;) &#x26;&#x26; ((el.clientWidth &#x26;&#x26; el.scrollWidth &#x3e; el.clientWidth
+) || (el.clientHeight &#x26;&#x26; el.scrollHeight &#x3e; el.clientHeight)));
+        },
+        getScalar = function(orig, dim) {
+            var value = parseInt(orig, 10) || 0;
+
+            if (dim &#x26;&#x26; isPercentage(orig)) {
+                value = F.getViewport()[dim] / 100 * value;
+            }
+
+            return Math.ceil(value);
+        },
+        getValue = function(value, dim) {
+            return getScalar(value, dim) + &#x27;px&#x27;;
+        };
+
+    jQuery.extend(F, {
+        // The current version of fancyBox
+        version: &#x27;2.1.5&#x27;,
+
+        defaults: {
+            padding: 15,
+            margin: 20,
+
+            width: 800,
+            height: 600,
+            minWidth: 100,
+            minHeight: 100,
+            maxWidth: 9999,
+            maxHeight: 9999,
+            pixelRatio: 1, // Set to 2 for retina display support
+
+            autoSize: true,
+            autoHeight: false,
+            autoWidth: false,
+
+            autoResize: true,
+            autoCenter: !isTouch,
+            fitToView: true,
+            aspectRatio: false,
+            topRatio: 0.5,
+            leftRatio: 0.5,
+
+            scrolling: &#x27;auto&#x27;, // &#x27;auto&#x27;, &#x27;yes&#x27; or &#x27;no&#x27;
+            wrapCSS: &#x27;&#x27;,
+
+            arrows: true,
+            closeBtn: true,
+            closeClick: false,
+            nextClick: false,
+            mouseWheel: true,
+            autoPlay: false,
+            playSpeed: 3000,
+            preload: 3,
+            modal: false,
+            loop: true,
+
+            ajax: {
+                dataType: &#x27;html&#x27;,
+                headers: {
+                    &#x27;X-fancyBox&#x27;: true
+                }
+            },
+            iframe: {
+                scrolling: &#x27;auto&#x27;,
+                preload: true
+            },
+            swf: {
+                wmode: &#x27;transparent&#x27;,
+                allowfullscreen: &#x27;true&#x27;,
+                allowscriptaccess: &#x27;always&#x27;
+            },
+
+            keys: {
+                next: {
+                    13: &#x27;left&#x27;, // enter
+                    34: &#x27;up&#x27;, // page down
+                    39: &#x27;left&#x27;, // right arrow
+                    40: &#x27;up&#x27; // down arrow
+                },
+                prev: {
+                    8: &#x27;right&#x27;, // backspace
+                    33: &#x27;down&#x27;, // page up
+                    37: &#x27;right&#x27;, // left arrow
+                    38: &#x27;down&#x27; // up arrow
+                },
+                close: [27], // escape key
+                play: [32], // space - start/stop slideshow
+                toggle: [70] // letter &#x22;f&#x22; - toggle fullscreen
+            },
+
+            direction: {
+                next: &#x27;left&#x27;,
+                prev: &#x27;right&#x27;
+            },
+
+            scrollOutside: true,
+
+            // Override some properties
+            index: 0,
+            type: null,
+            href: null,
+            content: null,
+            title: null,
+
+            // HTML templates
+            tpl: {
+                wrap: &#x27;&#x3c;div class=&#x22;fancybox-wrap&#x22; tabIndex=&#x22;-1&#x22;&#x3e;&#x3c;div class=&#x22;fancybox-skin&#x22;&#x3e;&#x3c;div class=&#x22;fancybox-outer&#x22;&#x3e;&#x3c;div class
+=&#x22;fancybox-inner&#x22;&#x3e;&#x3c;/div&#x3e;&#x3c;/div&#x3e;&#x3c;/div&#x3e;&#x3c;/div&#x3e;&#x27;,
+                image: &#x27;&#x3c;img class=&#x22;fancybox-image&#x22; src=&#x22;{href}&#x22; alt=&#x22;&#x22; /&#x3e;&#x27;,
+                iframe: &#x27;&#x3c;iframe id=&#x22;fancybox-frame{rnd}&#x22; name=&#x22;fancybox-frame{rnd}&#x22; class=&#x22;fancybox-iframe&#x22; frameborder=&#x22;0&#x22; vspace ...</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+&#x3c;a href=&#x22;large_1.jpg&#x22; class=&#x22;fancybox&#x22; rel=&#x22;gallery&#x22; title=&#x22;Sample title 1&#x22;&#x3e;&#
+x3c;img src=&#x22;small_1.jpg&#x22; /&#x3e;&#x3c;/a&#x3e;
+&#x3c;a href=&#x22;large_2.jpg&#x22; class=&#x22;fancybox&#x22; rel=&#x22;gallery&#x22; title=&#x22;Sample title 1&#x22;&#x3e;&#
+x3c;img src=&#x22;small_2.jpg&#x22; /&#x3e;&#x3c;/a&#x3e;
+
+Initialise the script like this:
+
+&#x3c;script&#x3e;
+    $(document).ready(function() {
+        $(&#x27;.fancybox&#x27;).<span class="apidocCodeKeywordSpan">fancybox</span>();
+    });
+&#x3c;/script&#x3e;
+
+May also be passed an optional options object which will extend the default values. Example:
+
+&#x3c;script&#x3e;
+    $(document).ready(function() {
+...</pre></li>
+    </ul>
+
+
+</div>
+
+<div class="apidocFooterDiv">
+    [ this document was created with
+    <a href="https://github.com/kaizhu256/node-utility2" target="_blank">utility2</a>
+    ]
+</div>
+</div>
